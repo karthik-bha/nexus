@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import Signup from './pages/Signup';
+import Auth from './pages/Auth';
+import Dashboard from './pages/Dashboard';
 
 function App() {
 
@@ -8,7 +9,8 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/dashboard" element={<Dashboard/>} />
          {/* make a route for sign in and a component for sign in and add it here  */}
       </Routes>
 

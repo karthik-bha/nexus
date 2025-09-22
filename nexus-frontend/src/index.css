@@ -3,9 +3,15 @@
 
 @theme{
     --font-content: 'Inter', sans-serif;
+ 
+}
+
+@layer base{
+  .button_style_1 {
+    @apply border px-2 py-1 rounded-2xl hover:scale-105 transition-all ease-out  hover:cursor-pointer
+  }
 }
 
 body {
-
   font-family: var(--font-content);
 }
