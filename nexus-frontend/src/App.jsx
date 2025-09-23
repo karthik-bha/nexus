@@ -2,16 +2,21 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Auth from './pages/Auth';
 import Dashboard from './pages/Dashboard';
+import Settings from './pages/Settings';
+import Layout from './components/Layout';
+import Profile from './pages/Profile';
+
 
 function App() {
 
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Layout><Home /></Layout>} />
         <Route path="/auth" element={<Auth />} />
-        <Route path="/dashboard" element={<Dashboard/>} />
-         {/* make a route for sign in and a component for sign in and add it here  */}
+        <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
+        <Route path="/settings" element={<Layout><Settings /></Layout>} />
+        <Route path="/profile" element={<Layout><Profile /></Layout>} />
       </Routes>
 
     </>

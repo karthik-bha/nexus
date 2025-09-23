@@ -10,6 +10,9 @@
   .button_style_1 {
     @apply border px-2 py-1 rounded-2xl hover:scale-105 transition-all ease-out  hover:cursor-pointer
   }
+   .button_style_2 {
+    @apply border px-2 py-1 rounded-sm hover:scale-105 transition-all ease-out  hover:cursor-pointer
+  }
 }
 
 body {

@@ -12,13 +12,13 @@ const Auth = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Use the state variables directly
+
         let resp;
 
         try {
             if (type === "sign-up") {
                 console.log(username, password, email);
-                resp = await fetch("http://localhost:3000/user/sign-up", {
+                resp = await fetch(`${import.meta.vite.VITE_BACKEND_URL}/user/sign-up`, {
                     body: JSON.stringify({ username, password, email }),
                     method: "POST",
                     headers: {
@@ -26,7 +26,7 @@ const Auth = () => {
                     },
                 });
             } else {
-                resp = await fetch("http://localhost:3000/user/sign-in", {
+                resp = await fetch(`${import.meta.vite.VITE_BACKEND_URL}/user/sign-in`, {
                     body: JSON.stringify({ username, password }),
                     method: "POST",
                     headers: {
@@ -40,7 +40,7 @@ const Auth = () => {
             console.log("Error during submission:", err);
         }
         finally {
-             window.location.href="/dashboard";
+            window.location.href = "/dashboard";
         }
     };
 
@@ -86,6 +86,9 @@ const Auth = () => {
                 <button className="button_style_1" type="submit">
                     {type === "sign-up" ? "Sign Up" : "Sign In"}
                 </button>
+                <p className="flex gap-2">{type === "sign-up" ? "Already have an account?" : "Don't have an account?"}
+                    <Link className="hover:text-red-500 transition duration-200 " to={`/auth?type=${type === "sign-up" ? "signin" : "sign-up"}`}>
+                        {type === "sign-up" ? "Sign In" : "Sign Up"}</Link></p>
             </form>
         </div>
     );
