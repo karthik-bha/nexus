@@ -61,22 +61,12 @@ const Navbar = () => {
                             <ul className="flex flex-col gap-4">
                                 <li>
                                     <Link
-                                        to="/post?type=image"
+                                        to="/post"
                                         className="flex gap-2 items-center hover:font-semibold transition-all duration-200"
                                         onClick={handleLinkClick}
                                     >
                                         <ImagePlus />
-                                        <span>Post a new picture</span>
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        to="/post?type=video"
-                                        className="flex gap-2 items-center hover:font-semibold transition-all duration-200"
-                                        onClick={handleLinkClick}
-                                    >
-                                        <Video />
-                                        <span>Post a new video</span>
+                                        <span>New Post</span>
                                     </Link>
                                 </li>
                                 <li>

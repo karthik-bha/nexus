@@ -18,7 +18,7 @@ const Auth = () => {
         try {
             if (type === "sign-up") {
                 console.log(username, password, email);
-                resp = await fetch(`${import.meta.vite.VITE_BACKEND_URL}/user/sign-up`, {
+                resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/sign-up`, {
                     body: JSON.stringify({ username, password, email }),
                     method: "POST",
                     headers: {
@@ -26,7 +26,7 @@ const Auth = () => {
                     },
                 });
             } else {
-                resp = await fetch(`${import.meta.vite.VITE_BACKEND_URL}/user/sign-in`, {
+                resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/sign-in`, {
                     body: JSON.stringify({ username, password }),
                     method: "POST",
                     headers: {
@@ -39,9 +39,9 @@ const Auth = () => {
         } catch (err) {
             console.log("Error during submission:", err);
         }
-        finally {
-            window.location.href = "/dashboard";
-        }
+        // finally {
+        //     window.location.href = "/dashboard";
+        // }
     };
 
     return (

@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import Settings from './pages/Settings';
 import Layout from './components/Layout';
 import Profile from './pages/Profile';
+import Post from './pages/Post';
 
 
 function App() {
@@ -12,11 +13,12 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Layout><Home /></Layout>} />
+        <Route path="/" element={<Home />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
         <Route path="/settings" element={<Layout><Settings /></Layout>} />
         <Route path="/profile" element={<Layout><Profile /></Layout>} />
+        <Route path="/post" element={<Layout><Post /></Layout>} />
       </Routes>
 
     </>
