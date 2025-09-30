@@ -6,26 +6,35 @@ import Settings from './pages/Settings';
 import Layout from './components/Layout';
 import Profile from './pages/Profile';
 import Post from './pages/Post';
-
+import PrivateRoute from './components/PrivateRoute'; 
 
 function App() {
-
   return (
     <>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<Auth />} />
-        <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
-        <Route path="/settings" element={<Layout><Settings /></Layout>} />
-        <Route path="/profile" element={<Layout><Profile /></Layout>} />
-        <Route path="/post" element={<Layout><Post /></Layout>} />
-      </Routes>
 
+        {/* Protected Routes */}
+        <Route
+          path="/dashboard"
+          element={<PrivateRoute><Layout><Dashboard /></Layout></PrivateRoute>}
+        />
+        <Route
+          path="/settings"
+          element={<PrivateRoute><Layout><Settings /></Layout></PrivateRoute>}
+        />
+        <Route
+          path="/profile"
+          element={<PrivateRoute><Layout><Profile /></Layout></PrivateRoute>}
+        />
+        <Route
+          path="/post"
+          element={<PrivateRoute><Layout><Post /></Layout></PrivateRoute>}
+        />
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
-
-// 1 rem = 16 px 
-// 2 rem = 2*16 = 32px
+export default App;

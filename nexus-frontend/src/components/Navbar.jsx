@@ -1,4 +1,4 @@
-import { ImagePlus, Settings, UserRound, Video } from "lucide-react";
+import { ImagePlus, LogOut, Settings, UserRound, Video } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
@@ -33,6 +33,11 @@ const Navbar = () => {
     const handleLinkClick = () => {
         setDropDown(false);
     };
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        window.location.replace("/auth?type=signin");
+    }
 
     return (
         <div>
@@ -89,7 +94,17 @@ const Navbar = () => {
                                         <span>Settings</span>
                                     </Link>
                                 </li>
-                                
+                                <li>
+                                    <button
+                                        className="flex gap-2 items-center hover:font-semibold hover:cursor-pointer transition-all duration-200"
+                                        onClick={() => handleLogout()}
+                                    >
+                                        <LogOut />
+                                        <span>Logout</span>
+                                    </button>
+                                </li>
+
+
                             </ul>
                         </div>
                     }

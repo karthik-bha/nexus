@@ -12,7 +12,6 @@ const Auth = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-
         let resp;
 
         try {
@@ -33,6 +32,10 @@ const Auth = () => {
                         'Content-Type': 'application/json',
                     },
                 });
+                console.log(resp);
+                const token = await resp.text();
+                localStorage.setItem("token", token);
+                window.location.replace("/dashboard");
             }
 
 
