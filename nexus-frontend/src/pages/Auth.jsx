@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Auth = () => {
     // 1. Define state variables for each input
@@ -11,9 +12,7 @@ const Auth = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         let resp;
-
         try {
             if (type === "sign-up") {
                 console.log(username, password, email);
@@ -33,18 +32,27 @@ const Auth = () => {
                     },
                 });
                 console.log(resp);
-                const token = await resp.text();
-                localStorage.setItem("token", token);
-                window.location.replace("/dashboard");
             }
 
 
         } catch (err) {
             console.log("Error during submission:", err);
         }
-        // finally {
-        //     window.location.href = "/dashboard";
-        // }
+        switch (resp.status) {
+            case 409:
+                toast.error("User already exists");
+                break;
+            case 200:
+                toast.success("Successfully signed up");
+                const token = await resp.text();
+                localStorage.setItem("token", token);
+                window.location.href = "/dashboard";
+                break;
+            default:
+                toast.error("Something went wrong");
+                const errorText = await resp.text();
+                toast.error(errorText);
+        }
     };
 
     return (

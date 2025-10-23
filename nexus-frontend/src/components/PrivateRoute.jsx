@@ -5,7 +5,6 @@ const PrivateRoute = ({ children }) => {
     const token = localStorage.getItem('token');
 
     if (!token) {
-
         return <Navigate to="/auth?type=signin" replace />;
     }
 

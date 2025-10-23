@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import Loader from "../components/Loader";
+import { toast } from "react-toastify";
 
 // a small message thanking them for using the platform
 const Profile = () => {
     const token = localStorage.getItem("token");
-    const [Loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [Error, setError] = useState(null);
     const [profileData, setProfileData] = useState({});
     const [editProfile, setEditProfile] = useState(false);
@@ -13,7 +15,6 @@ const Profile = () => {
     }, [])
 
     const fetchUserProfile = async () => {
-
         try {
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/profile`,
                 {
@@ -24,8 +25,13 @@ const Profile = () => {
                 });
             if (response.status === 200) {
                 const data = await response.json();
-                console.log(data);
+                // console.log(data);
                 setProfileData(data);
+            }
+            else if (response.status === 401) {
+                console.log(token);
+                // localStorage.removeItem("token");
+                // window.location.replace("/");
             }
 
         } catch (e) {
@@ -45,8 +51,11 @@ const Profile = () => {
         return (<div>{Error}</div>)
     }
     if (editProfile) {
-        return <EditProfileForm profileData={profileData} setEditProfile={setEditProfile} setProfileData={setProfileData} setLoading={setLoading} token={token}/>
+        return <EditProfileForm profileData={profileData} setEditProfile={setEditProfile} setProfileData={setProfileData} loading={loading} setLoading={setLoading} token={token} />
     }
+
+    if (loading) return <Loader />
+
     return (
         <section className="max-w-[1200px] mx-auto flex flex-col py-12 px-4">
             <h2 className="text-2xl md:text-3xl text-center font-semibold ">Profile</h2>
@@ -64,7 +73,7 @@ const Profile = () => {
                     </>}
                     <p className={profileData?.bio ? "" : `text-red-500 text-[0.9rem] italic`}>{profileData?.bio || "No bio found"}</p>
                     <div className="flex gap-2 flex-col md:flex-row">
-                        <button className="button_style_2 text-[0.9rem]">Reset password</button>
+                        <button className="button_style_2 text-[0.9rem]" onClick={() => window.location.href = "/reset-password"}>Reset password</button>
                         <button className="button_style_2 text-[0.9rem]"
                             onClick={() => setEditProfile(true)}>Edit profile</button>
                     </div>
@@ -76,7 +85,7 @@ const Profile = () => {
 }
 
 export default Profile
-const EditProfileForm = ({ profileData, setEditProfile, setLoading, setProfileData, token}) => {
+const EditProfileForm = ({ profileData, setEditProfile, setLoading, setProfileData, token, loading }) => {
     // Initialize state using data passed via props
     const [username, setUsername] = useState(profileData.username || "");
     const [email, setEmail] = useState(profileData.email || "");
@@ -93,24 +102,30 @@ const EditProfileForm = ({ profileData, setEditProfile, setLoading, setProfileDa
                     method: "PATCH",
                     headers: {
                         Authorization: `Bearer ${token}`,
-             
+                        "Content-Type": "application/json"
                     },
                     body: JSON.stringify({ username, email, bio })
                 });
-                console.log(response);
-            if (response.status === 200) {
-                const data = await response.json();
-                console.log(data);
-                setProfileData(data);
+            console.log(response);
+            switch (response.status) {
+                case 200: {
+                    toast.success("Profile updated successfully");
+                    const data = await response.json();
+                    // console.log(data);
+                    setProfileData(data);
+                    break;
+                }
+                default: {
+                    toast.error("Failed to update profile");
+                }
             }
-
         } catch (e) {
             console.log(e);
         } finally {
             setLoading(false);
         }
     };
-
+    if (loading) return <Loader />
     return (
         // Modal overlay for the form
         <div className="fixed inset-0 flex items-center justify-center z-50 p-4">

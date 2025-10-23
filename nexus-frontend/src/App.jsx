@@ -7,13 +7,17 @@ import Layout from './components/Layout';
 import Profile from './pages/Profile';
 import Post from './pages/Post';
 import PrivateRoute from './components/PrivateRoute'; 
+import { ToastContainer, toast } from 'react-toastify';
+import PassReset from './pages/PassReset';
 
 function App() {
   return (
     <>
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/reset-password" element={<PassReset/>} />
 
         {/* Protected Routes */}
         <Route
