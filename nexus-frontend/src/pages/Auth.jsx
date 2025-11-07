@@ -39,14 +39,14 @@ const Auth = () => {
             console.log("Error during submission:", err);
         }
         switch (resp.status) {
-            case 409:
-                toast.error("User already exists");
-                break;
-            case 200:
+            case 200 || 201:
                 toast.success("Successfully signed up");
                 const token = await resp.text();
                 localStorage.setItem("token", token);
                 window.location.href = "/dashboard";
+                break;
+            case 409:
+                toast.error("User already exists");
                 break;
             default:
                 toast.error("Something went wrong");

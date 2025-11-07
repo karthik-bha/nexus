@@ -1,24 +1,25 @@
 const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 const apiWrapper = async (endpoint, options = {}) => {
+
     options.headers = {
         ...options.headers,
-        "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
     };
+    if (!(options.body instanceof FormData)) {
+        options.headers["Content-Type"] = "application/json";
+    }
 
     try {
         let response = await fetch(`${API_BASE_URL}${endpoint}`, options);
-        // if (response.status === 401) {
-        //     localStorage.clear();
-        //     window.location.href = "/auth?type=signin";
-        //     return;
-        // }
-
-        // Return parsed response
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Error ${response.status}: ${errorText}`);
+        }
         return response;
     }
     catch (err) {
-        console.log(err);
+        console.error("API error:", err);
+        throw err;
     }
 
 }

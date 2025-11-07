@@ -1,6 +1,7 @@
 import { Cross, CrossIcon, Trash } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import apiWrapper from "../api-wrapper/api";
 
 const Post = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -33,7 +34,7 @@ const Post = () => {
         formData.append('description', data.description);
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/post/`, {
+            const response = await apiWrapper("/post/", {
                 method: "POST",
                 body: formData
             })

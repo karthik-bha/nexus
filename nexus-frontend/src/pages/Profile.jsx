@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import { toast } from "react-toastify";
+import apiWrapper from "../api-wrapper/api";
 
 // a small message thanking them for using the platform
 const Profile = () => {
@@ -30,8 +31,8 @@ const Profile = () => {
             }
             else if (response.status === 401) {
                 console.log(token);
-                // localStorage.removeItem("token");
-                // window.location.replace("/");
+                localStorage.removeItem("token");
+                window.location.replace("/");
             }
 
         } catch (e) {
@@ -60,14 +61,14 @@ const Profile = () => {
         <section className="max-w-[1200px] mx-auto flex flex-col py-12 px-4">
             <h2 className="text-2xl md:text-3xl text-center font-semibold ">Profile</h2>
             <div className="flex flex-col items-center py-6 gap-4 md:w-[40vw]  md:mx-auto">
-                <img src={profileData.profile_picture || extraData.profile_picture}
+                <img src={profileData?.profile_picture || extraData?.profile_picture}
                     alt="profile_picture"
                     className="h-32 w-32"
                 />
                 <div className="flex flex-col gap-4">
                     <p>{profileData?.username || "Username not available"}</p>
                     {profileData?.email ? <>
-                        <p>{profileData.email}</p>
+                        <p>{profileData?.email}</p>
                     </> : <>
                         <p className="text-red-500 text-[0.9rem] italic">No e-mail found</p>
                     </>}
@@ -87,37 +88,42 @@ const Profile = () => {
 export default Profile
 const EditProfileForm = ({ profileData, setEditProfile, setLoading, setProfileData, token, loading }) => {
     // Initialize state using data passed via props
-    const [username, setUsername] = useState(profileData.username || "");
-    const [email, setEmail] = useState(profileData.email || "");
-    const [bio, setBio] = useState(profileData.bio || "");
-    const form = new FormData();
-
+    const [username, setUsername] = useState(profileData?.username || "");
+    const [email, setEmail] = useState(profileData?.email || "");
+    const [bio, setBio] = useState(profileData?.bio || "");
+    const [file, setFile] = useState(null);
 
     const handleSave = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/profile`,
+            const form = new FormData();
+            // construct the json 
+            const user = {
+                username: username || "",
+                email: email || "",
+                bio: bio || "",
+            };
+            form.append(
+                "user",
+                new Blob([JSON.stringify(user)], { type: "application/json" })
+            );
+            if (file) {
+                form.append("file", file);
+            }
+            const response = await apiWrapper(`/user/profile`,
                 {
                     method: "PATCH",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ username, email, bio })
+                    body: form
                 });
             console.log(response);
-            switch (response.status) {
-                case 200: {
-                    toast.success("Profile updated successfully");
-                    const data = await response.json();
-                    // console.log(data);
-                    setProfileData(data);
-                    break;
-                }
-                default: {
-                    toast.error("Failed to update profile");
-                }
+            if (response.status === 200) {
+                toast.success("Profile updated successfully");
+                const data = await response.json();
+                setProfileData(data);
+                setEditProfile(false);
+            } else {
+                toast.error("Failed to update profile");
             }
         } catch (e) {
             console.log(e);
@@ -140,7 +146,11 @@ const EditProfileForm = ({ profileData, setEditProfile, setLoading, setProfileDa
                 onSubmit={handleSave}
             >
                 <h3 className="text-2xl font-bold text-gray-800 border-b pb-2 mb-2">Edit Your Profile</h3>
-
+                <input className="border p-2 rounded-lg"
+                    type="file" id="file"
+                    accept="image/*"
+                    onChange={(e) => setFile(e.target.files[0])} />
+                {file && <img src={URL.createObjectURL(file)} alt="preview" className="h-32 w-32 items-center mx-auto" />}
                 <input
                     type="text"
                     placeholder="Username"
