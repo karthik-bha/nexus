@@ -60,7 +60,7 @@ const Profile = () => {
 
   return (
     <section className="max-w-[1200px] mx-auto flex flex-col py-12 px-4 text-white">
-      <h2 className="text-3xl text-center font-semibold tracking-wide mb-6">Profile</h2>
+      <h2 className="text-3xl text-center font-semibold tracking-wide mb-12 ">Profile</h2>
 
       <div className="flex flex-col items-center bg-neutral-900 border border-neutral-800 rounded-xl p-8 shadow-xl gap-6 w-full md:w-[40vw] mx-auto">
         <img
@@ -86,6 +86,12 @@ const Profile = () => {
             className="mt-4 px-5 py-2 bg-gray-100 text-black font-semibold rounded-full hover:bg-gray-300 transition"
           >
             Go to Settings
+          </button>
+           <button
+            onClick={() => window.location.href = `/public-profile/${profileData?.username}`}
+            className="mt-4 px-5 py-2 bg-gray-100 text-black font-semibold rounded-full hover:bg-gray-300 transition"
+          >
+            View your Public Profile
           </button>
 
           <p className="text-xs text-gray-500 mt-4">

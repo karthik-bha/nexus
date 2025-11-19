@@ -11,6 +11,11 @@ const Auth = () => {
     const [searchParams] = useSearchParams();
     const type = searchParams.get("type");
 
+    function decodeJwt(token) {
+        const payload = token.split(".")[1];
+        return JSON.parse(atob(payload));
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -45,6 +50,8 @@ const Auth = () => {
                 } else {
                     const token = await response.text();
                     localStorage.setItem("token", token);
+                    const decoded = decodeJwt(token);
+                    localStorage.setItem("userId", decoded.sub);
                     toast.success("Sign-in successful! Redirecting...");
                     window.location.href = "/dashboard";
                 }

@@ -91,7 +91,7 @@ const Settings = () => {
 
     return (
         <section className="max-w-[700px] mx-auto py-12 px-6 text-gray-100">
-            <h2 className="text-3xl text-center font-semibold mb-8">Account Settings</h2>
+            <h2 className="text-3xl text-center font-semibold mb-12 ">Account Settings</h2>
 
             {/* Profile Update */}
             <form

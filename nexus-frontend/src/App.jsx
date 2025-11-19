@@ -6,18 +6,27 @@ import Settings from './pages/Settings';
 import Layout from './components/Layout';
 import Profile from './pages/Profile';
 import Post from './pages/Post';
-import PrivateRoute from './components/PrivateRoute'; 
+import PrivateRoute from './components/PrivateRoute';
 import { ToastContainer, toast } from 'react-toastify';
 import PassReset from './pages/PassReset';
+import UserPublicProfile from './pages/UserPublicProfile';
+import ChatList from './pages/ChatList';
+import ChatWindow from './pages/ChatWindow';
 
 function App() {
+
   return (
     <>
       <ToastContainer />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<Auth />} />
-        <Route path="/reset-password" element={<PassReset/>} />
+        <Route path="/reset-password" element={<PassReset />} />
+        <Route path="/public-profile/:username" element={<UserPublicProfile />} />
+        <Route path="/chat" element={<ChatList />} />
+        <Route path="/chat/:chatId" element={<ChatWindow />} />
+
+
 
         {/* Protected Routes */}
         <Route
@@ -36,6 +45,7 @@ function App() {
           path="/post"
           element={<PrivateRoute><Layout><Post /></Layout></PrivateRoute>}
         />
+
       </Routes>
     </>
   );

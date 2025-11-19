@@ -125,7 +125,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-gray-200 font-sans py-10">
       <div className="flex flex-col max-w-2xl mx-auto space-y-8">
-        <h3 className="text-3xl font-semibold text-center mb-4 tracking-tight text-gray-100">
+        <h3 className="text-3xl font-semibold text-center mb-12 tracking-tight text-gray-100">
           Your Feed
         </h3>
 

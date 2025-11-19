@@ -90,7 +90,7 @@ const Post = () => {
 
   return (
     <section className="flex flex-col items-center text-gray-100 bg-black min-h-screen py-10">
-      <h2 className="text-center text-3xl md:text-4xl mb-8 font-bold tracking-wide">
+      <h2 className="text-3xl text-center font-semibold tracking-wide mb-12 ">
         Create a New Post
       </h2>
 
