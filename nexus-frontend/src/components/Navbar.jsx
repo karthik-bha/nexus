@@ -1,4 +1,4 @@
-import { ImagePlus, LogOut, Settings, UserRound, MessageSquare } from "lucide-react";
+import { ImagePlus, LogOut, Settings, UserRound, MessageSquare, Search, SearchIcon } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
@@ -38,6 +38,13 @@ const Navbar = () => {
 
                 {/* Icons */}
                 <div className="flex gap-6 items-center relative">
+                    <Link to="/search" title="Search">
+                        <SearchIcon
+                            size={24}
+                            className="hover:text-gray-300 transition-transform hover:scale-110"
+                        />
+                    </Link>
+
                     <Link to="/chat" title="Messages">
                         <MessageSquare
                             size={24}

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import { toast } from "react-toastify";
+import apiWrapper from "../api-wrapper/api";
 
 const UserPublicProfile = () => {
     const { username } = useParams();
@@ -80,6 +81,66 @@ const UserPublicProfile = () => {
             setLoading(false);
         }
     };
+    const navigate = useNavigate();
+
+    const startChat = async () => {
+
+        if (profile?.id === localStorage.getItem("userId")) {
+            toast.error("You cannot start a chat with yourself.");
+            return;
+        }
+
+        try {
+            const response = await apiWrapper("/chat/start", {
+                method: "POST",
+                body: JSON.stringify({
+                    otherUserId: profile?.id
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.chatId) {
+                navigate(`/chat/${data.chatId}`);
+            }
+        } catch (err) {
+            toast.error("Unable to start chat");
+            console.error(err);
+        }
+    };
+    const userId = localStorage.getItem("userId");
+    const isFollowing = profile?.followers?.includes(userId);
+    const handleFollow = async () => {
+        try {
+            await apiWrapper(`/follow/${profile.id}`, { method: "POST" });
+
+            setProfile(prev => ({
+                ...prev,
+                followers: [...(prev.followers || []), userId],
+
+            }));
+        } catch (e) {
+            toast.error("Failed to follow");
+        }
+    };
+
+    const handleUnfollow = async () => {
+        try {
+            await apiWrapper(`/follow/unfollow/${profile.id}`, { method: "POST" });
+
+            setProfile(prev => ({
+                ...prev,
+                followers: prev.followers?.filter(id => id !== userId) || [],
+
+            }));
+        } catch (e) {
+            toast.error("Failed to unfollow");
+        }
+    };
+
+
+
+
 
     if (loading) return <Loader />;
 
@@ -102,30 +163,67 @@ const UserPublicProfile = () => {
             transition-all
         ">
                     <img
-                        src={profile?.profile_picture}
-                        onError={(e) =>
-                        (e.target.src =
-                            "https://cdn-icons-png.flaticon.com/512/847/847969.png")
-                        }
+                        src={profile?.profile_picture || "https://cdn-icons-png.flaticon.com/512/847/847969.png"}
+                        alt="Profile Picture"
                         className="w-24 h-24 rounded-full object-cover border border-gray-700 shrink-0"
                     />
 
                     <div className="text-center sm:text-left flex flex-col">
                         <h2 className="text-2xl font-semibold">{profile?.username}</h2>
+                        {/* Only show buttons if NOT self-profile */}
+                        {profile.id !== userId && (
+                            <>
+                                <button
+                                    onClick={startChat}
+                                    className="
+        mt-3 px-3 py-1.5 rounded-md text-sm
+        bg-neutral-800 border border-neutral-700 
+        hover:bg-neutral-700 transition text-white
+      "
+                                >
+                                    Message
+                                </button>
+
+                                <button
+                                    onClick={isFollowing ? handleUnfollow : handleFollow}
+                                    className="
+        mt-2 px-3 py-1.5 rounded-md text-sm
+        bg-neutral-800 border border-neutral-700
+        hover:bg-neutral-700 transition text-white
+      "
+                                >
+                                    {isFollowing ? "Following" : "Follow"}
+                                </button>
+                            </>
+                        )}
+
 
                         <p className="text-gray-400 mt-1 max-w-[450px]">
                             {profile?.bio || "No bio added."}
                         </p>
 
-                        <div className="flex flex-wrap gap-6 sm:gap-8 mt-3 text-sm text-gray-400 justify-center sm:justify-start">
+                        <div className="flex flex-wrap gap-6 sm:gap-10 mt-3 text-sm text-gray-400 justify-center sm:justify-start">
+
                             <span>
                                 <span className="text-gray-200 font-semibold">{posts.length}</span>{" "}
                                 posts
                             </span>
+
+                            <span>
+                                <span className="text-gray-200 font-semibold">{profile?.followers?.length || 0}</span>{" "}
+                                followers
+                            </span>
+
+                            <span>
+                                <span className="text-gray-200 font-semibold">{profile?.following?.length || 0}</span>{" "}
+                                following
+                            </span>
+
                             <span>
                                 Joined {new Date(profile?.created_at).toLocaleDateString()}
                             </span>
                         </div>
+
                     </div>
                 </div>
 

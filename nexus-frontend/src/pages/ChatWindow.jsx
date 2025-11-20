@@ -181,7 +181,7 @@ const ChatWindow = () => {
             <div className="bg-neutral-900 border-b border-neutral-800 px-4 py-3 flex items-center gap-3
                 sticky top-0 z-20">
                 <img
-                    src={chatUser?.profile_picture || "/default-pfp.png"}
+                    src={chatUser?.profile_picture || "https://cdn-icons-png.flaticon.com/512/847/847969.png"}
                     className="w-10 h-10 rounded-full object-cover"
                     alt="pfp"
                 />

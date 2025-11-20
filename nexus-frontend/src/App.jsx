@@ -12,6 +12,7 @@ import PassReset from './pages/PassReset';
 import UserPublicProfile from './pages/UserPublicProfile';
 import ChatList from './pages/ChatList';
 import ChatWindow from './pages/ChatWindow';
+import SearchUser from './pages/SearchEngine';
 
 function App() {
 
@@ -23,8 +24,8 @@ function App() {
         <Route path="/auth" element={<Auth />} />
         <Route path="/reset-password" element={<PassReset />} />
         <Route path="/public-profile/:username" element={<UserPublicProfile />} />
-        <Route path="/chat" element={<ChatList />} />
-        <Route path="/chat/:chatId" element={<ChatWindow />} />
+     
+
 
 
 
@@ -45,6 +46,9 @@ function App() {
           path="/post"
           element={<PrivateRoute><Layout><Post /></Layout></PrivateRoute>}
         />
+        <Route path="/chat" element={<PrivateRoute><Layout><ChatList /></Layout></PrivateRoute>} />
+        <Route path="/chat/:chatId" element={<PrivateRoute><ChatWindow /></PrivateRoute>} /> 
+           <Route path='/search' element={<PrivateRoute><Layout><SearchUser /></Layout></PrivateRoute>} />
 
       </Routes>
     </>

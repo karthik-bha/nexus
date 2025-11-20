@@ -100,7 +100,7 @@ const ChatList = () => {
               className="flex items-center gap-4 bg-neutral-900 border border-neutral-800 p-4 rounded-2xl hover:bg-neutral-800 cursor-pointer transition"
             >
               <img
-                src={chat.otherUserPfp || "/default-pfp.png"}
+                src={chat.otherUserPfp || "https://cdn-icons-png.flaticon.com/512/847/847969.png"}
                 className="w-12 h-12 rounded-full object-cover"
                 alt="pfp"
               />
