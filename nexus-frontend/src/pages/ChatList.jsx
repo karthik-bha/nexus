@@ -1,6 +1,7 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSocket } from "../context/socketContext";
+import apiWrapper from "../api-wrapper/api";
 
 const ChatList = () => {
   const navigate = useNavigate();
@@ -12,49 +13,67 @@ const ChatList = () => {
   const [chats, setChats] = useState([]);
   const [unread, setUnread] = useState({});
 
-  // Helper: sort chats by last message
-  const sortChats = (list) =>
-    [...list].sort(
-      (a, b) =>
-        new Date(b.lastMessageTimestamp || 0) -
-        new Date(a.lastMessageTimestamp || 0)
-    );
+  // Sort helper
+  const sortChats = useCallback(
+    (list) =>
+      [...list].sort(
+        (a, b) =>
+          new Date(b.lastMessageTimestamp || 0) -
+          new Date(a.lastMessageTimestamp || 0)
+      ),
+    []
+  );
 
-  // Load initial chat list
+  // Load chats initially
+  const loadChats = useCallback(async () => {
+    try {
+      const resp = await apiWrapper(`/chat/list`, {
+        method: "GET",
+      });
+
+      const data = await resp.json();
+      setChats(sortChats(data));
+
+      const unreadObj = {};
+      data.forEach((c) => (unreadObj[c.chatId] = c.unreadCount || 0));
+      setUnread(unreadObj);
+    } catch (e) {
+      console.error("Failed to load chats", e);
+    }
+  }, [sortChats]);
+
   useEffect(() => {
-    const loadChats = async () => {
-      try {
-        const resp = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/chat/list`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-
-        const data = await resp.json();
-        setChats(sortChats(data));
-      } catch (e) {
-        console.error("Failed to load chats", e);
-      }
-    };
-
     loadChats();
-  }, []);
+  }, [loadChats]);
 
-  // Determine which chat page the user is viewing
+  // Only reload chats partially (for unread count)
+  const refreshChats = useCallback(async () => {
+    try {
+      const resp = await apiWrapper(`/chat/list`, {
+        method: "GET",
+      });
+
+      const data = await resp.json();
+      setChats(sortChats(data));
+
+      const unreadObj = {};
+      data.forEach((c) => (unreadObj[c.chatId] = c.unreadCount || 0));
+      setUnread(unreadObj);
+    } catch (e) {
+      console.error("Failed to refresh chats", e);
+    }
+  }, [sortChats]);
+
+  // Detect active chat
   const activeChatId = useMemo(() => {
     const match = location.pathname.match(/\/chat\/(.+)/);
     return match ? match[1] : null;
   }, [location.pathname]);
 
-  // Socket listener for chat-updated
-  useEffect(() => {
-    if (!socket || !connected) return;
-
-    const handleChatUpdate = ({ chatId, lastMessage, lastMessageTimestamp }) => {
-      // Update chat preview list
+  // Socket handler
+  const handleChatUpdate = useCallback(
+    async ({ chatId, lastMessage, lastMessageTimestamp }) => {
+      // Instant UI update
       setChats((prev) => {
         const updated = prev.map((c) =>
           c.chatId === chatId
@@ -64,22 +83,40 @@ const ChatList = () => {
         return sortChats(updated);
       });
 
-      // Unread handling:
-      // Only mark as unread IF:
-      // - The message is NOT from the user
-      // - The user is NOT in that chat window
+      // If not currently viewing chat -> mark unread
       if (activeChatId !== chatId) {
-        setUnread((prev) => ({ ...prev, [chatId]: true }));
+        setUnread((prev) => ({
+          ...prev,
+          [chatId]: (prev[chatId] || 0) + 1,
+        }));
       }
-    };
+
+      // Sync with backend (gets real unreadCount)
+      refreshChats();
+    },
+    [activeChatId, refreshChats, sortChats]
+  );
+
+  // Bind socket listener
+  useEffect(() => {
+    if (!socket || !connected) return;
 
     socket.on("chat-updated", handleChatUpdate);
+
     return () => socket.off("chat-updated", handleChatUpdate);
+  }, [socket, connected, handleChatUpdate]);
 
-  }, [socket, connected, activeChatId]);
+  // When opening chat -> mark as read backend
+  const openChat = async (chatId) => {
+    try {
+      await apiWrapper(`/chat/mark-read/${chatId}`, { method: "POST" });
 
-  const openChat = (chatId) => {
-    setUnread((prev) => ({ ...prev, [chatId]: false }));
+      // Reset unread locally
+      setUnread((prev) => ({ ...prev, [chatId]: 0 }));
+    } catch (err) {
+      console.error("Failed to mark read", err);
+    }
+
     navigate(`/chat/${chatId}`);
   };
 
@@ -100,7 +137,10 @@ const ChatList = () => {
               className="flex items-center gap-4 bg-neutral-900 border border-neutral-800 p-4 rounded-2xl hover:bg-neutral-800 cursor-pointer transition"
             >
               <img
-                src={chat.otherUserPfp || "https://cdn-icons-png.flaticon.com/512/847/847969.png"}
+                src={
+                  chat.otherUserPfp ||
+                  "https://cdn-icons-png.flaticon.com/512/847/847969.png"
+                }
                 className="w-12 h-12 rounded-full object-cover"
                 alt="pfp"
               />
@@ -109,7 +149,6 @@ const ChatList = () => {
                 <p className="font-medium text-gray-100 text-lg">
                   {chat.otherUserUsername}
                 </p>
-
                 <p className="text-gray-400 text-sm truncate w-[250px]">
                   {chat.lastMessage || "No messages yet"}
                 </p>
@@ -126,9 +165,9 @@ const ChatList = () => {
                 </p>
               </div>
 
-              {unread[chat.chatId] && (
+              {unread[chat.chatId] > 0 && (
                 <span className="bg-blue-600 text-white text-[10px] px-2 py-1 rounded-full ml-2">
-                  NEW
+                  {unread[chat.chatId]}
                 </span>
               )}
             </div>

@@ -101,7 +101,7 @@ const Post = () => {
         {/* Media Input Field */}
         <div className="flex flex-col gap-2">
           <label htmlFor="postFile" className="text-lg font-semibold">
-            Upload Image or Video
+            Upload Image
           </label>
           <input
             id="postFile"

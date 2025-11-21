@@ -113,7 +113,7 @@ export default function SearchUser() {
                         >
 
                             <img
-                                src={u.profile_picture || "https://cdn-icons-png.flaticon.com/512/6596/6596121.png"}
+                                src={u.profile_picture || "https://cdn-icons-png.flaticon.com/512/847/847969.png"}
                                 className="w-10 h-10 rounded-full object-cover bg-neutral-700"
                             />
                             <span className="text-white">{u.username}</span>

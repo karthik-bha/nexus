@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import { toast } from "react-toastify";
 import apiWrapper from "../api-wrapper/api";
+import PostModal from "../components/PostModal";
 
 const UserPublicProfile = () => {
     const { username } = useParams();
@@ -11,6 +12,8 @@ const UserPublicProfile = () => {
     const [profile, setProfile] = useState(null);
     const [posts, setPosts] = useState([]);
     const [sortBy, setSortBy] = useState("newest");
+    const [activePost, setActivePost] = useState(null);
+
 
     const parseJavaDate = (str) => {
         const d = new Date(str);
@@ -138,6 +141,28 @@ const UserPublicProfile = () => {
         }
     };
 
+    const handleDeletePost = async (postId) => {
+        try {
+            const res = await apiWrapper(`/post/${postId}`, {
+                method: "DELETE"
+            });
+
+            if (!res.ok) {
+                const data = await res.json();
+                throw new Error(data.message || "Failed to delete post");
+            }
+
+            toast.success("Post deleted!");
+
+            // Remove the post from UI
+            setPosts(prev => prev.filter(p => p.id !== postId));
+
+            setActivePost(null);
+
+        } catch (err) {
+            toast.error(err.message || "Error deleting post");
+        }
+    };
 
 
 
@@ -263,6 +288,7 @@ const UserPublicProfile = () => {
                                 <div
                                     key={post.id}
                                     className="relative rounded-xl overflow-hidden border border-neutral-800 aspect-square"
+                                    onClick={() => setActivePost(post)}
                                 >
                                     <img
                                         src={post.imageUrl}
@@ -274,6 +300,15 @@ const UserPublicProfile = () => {
                         </div>
                     )}
                 </div>
+                {activePost && (
+                    <PostModal
+                        post={activePost}
+                        userDetails={profile}
+                        onClose={() => setActivePost(null)}
+                        onDelete={handleDeletePost}
+                    />
+
+                )}
 
 
             </div>

@@ -1,10 +1,14 @@
 import { ImagePlus, LogOut, Settings, UserRound, MessageSquare, Search, SearchIcon } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useChat } from "../context/ChatContext";
 
 const Navbar = () => {
     const [dropDown, setDropDown] = useState(false);
     const dropRef = useRef(null);
+    const { totalUnread } = useChat();
+
+    
 
     const handleToggleDropDown = () => setDropDown((prev) => !prev);
 
@@ -24,7 +28,7 @@ const Navbar = () => {
         localStorage.removeItem("token");
         window.location.replace("/auth?type=signin");
     };
-
+    const pfp = localStorage.getItem("pfp");
     return (
         <div className="bg-black text-white sticky top-0 z-50 shadow-lg border-b border-gray-800">
             <div className="max-w-[1200px] mx-auto px-6 py-4 flex justify-between items-center">
@@ -45,16 +49,29 @@ const Navbar = () => {
                         />
                     </Link>
 
-                    <Link to="/chat" title="Messages">
+                    <Link to="/chat" title="Messages" className="relative">
                         <MessageSquare
                             size={24}
                             className="hover:text-gray-300 transition-transform hover:scale-110"
                         />
+
+                        {totalUnread > 0 && (
+                            <span className="
+                            absolute -top-1 -right-2 
+                            w-2.5 h-2.5 
+                            bg-red-500 rounded-full 
+                            animate-pulse
+                            " />
+                        )}
                     </Link>
+
 
                     <img
                         id="account-icon"
-                        src="https://cdn-icons-png.flaticon.com/512/6596/6596121.png "
+                        src={pfp && pfp.trim() !== ""
+                            ? pfp
+                            : "https://cdn-icons-png.flaticon.com/512/847/847969.png"}
+
                         className="w-9 h-9 hover:cursor-pointer hover:scale-110 transition-all border border-gray-700 rounded-full"
                         onClick={handleToggleDropDown}
                         alt="Account"
@@ -64,7 +81,7 @@ const Navbar = () => {
                     {dropDown && (
                         <div
                             ref={dropRef}
-                            className="absolute top-12 right-0 bg-gray-900 text-white border border-gray-700 rounded-2xl shadow-xl w-[85vw] md:w-[25vw] xl:w-[15vw] p-4 animate-fadeIn"
+                            className="absolute top-12 right-0 bg-neutral-900 text-white border border-neutral-700 rounded-2xl shadow-xl w-[85vw] md:w-[25vw] xl:w-[15vw] p-4 animate-fadeIn"
                         >
                             <ul className="flex flex-col gap-3 text-sm">
                                 <li>

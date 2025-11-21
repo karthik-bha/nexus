@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import apiWrapper from "../api-wrapper/api";
 
 const Auth = () => {
     const [username, setUsername] = useState("");
@@ -52,6 +53,10 @@ const Auth = () => {
                     localStorage.setItem("token", token);
                     const decoded = decodeJwt(token);
                     localStorage.setItem("userId", decoded.sub);
+
+                    const data = await apiWrapper('/user/profile', { method: 'GET' });
+                    const user = await data.json();
+                    localStorage.setItem('pfp', user.profile_picture || "");
                     toast.success("Sign-in successful! Redirecting...");
                     window.location.href = "/dashboard";
                 }
