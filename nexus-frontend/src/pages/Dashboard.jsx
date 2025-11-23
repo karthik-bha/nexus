@@ -167,19 +167,23 @@ const Dashboard = () => {
   const noPosts = posts.length === 0;
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f] text-gray-200 font-sans py-10">
+    <div className="min-h-screen bg-[#0a0a0a] text-gray-200 font-sans py-10">
+
       <div className="flex flex-col max-w-2xl mx-auto space-y-8">
         <h3 className="text-3xl font-semibold text-center mb-8 text-gray-100">
           Your Feed
         </h3>
 
         {/* FEED TYPE SWITCH */}
-        <div className="flex justify-center gap-4 mb-4">
+        <div className="flex justify-center gap-4 mb-10">
           <button
             onClick={() => setFeedType("following")}
 
-            className={`px-4 py-2 rounded-xl ${feedType === "following" ? "bg-white text-black" : "bg-[#2a2a2a]"
+            className={`px-5 py-2 rounded-full transition border hover:cursor-pointer ${feedType === "following"
+              ? "bg-gray-100 text-black border-gray-300 font-semibold"
+              : "bg-[#1a1a1a] border-[#2a2a2a] hover:border-gray-500"
               }`}
+
           >
             Following
           </button>
@@ -187,8 +191,11 @@ const Dashboard = () => {
           <button
             onClick={() => setFeedType("discovery")}
 
-            className={`px-4 py-2 rounded-xl ${feedType === "discovery" ? "bg-white text-black" : "bg-[#2a2a2a]"
+            className={`px-5 py-2 rounded-full transition border hover:cursor-pointer ${feedType === "discovery"
+              ? "bg-gray-100 text-black border-gray-300 font-semibold"
+              : "bg-[#1a1a1a] border-[#2a2a2a] hover:border-gray-500"
               }`}
+
           >
             Discovery
           </button>
@@ -219,7 +226,7 @@ const Dashboard = () => {
         {posts.map((post) => (
           <div
             key={post.id}
-            className="rounded-3xl border border-[#2a2a2a] bg-[#1a1a1a] shadow-md p-5"
+            className="hover:-translate-y-1  duration-200 rounded-2xl bg-[#111] border border-[#262626] shadow-[0_0_10px_rgba(0,0,0,0.4)] p-6 hover:shadow-[0_0_18px_rgba(255,255,255,0.06)] transition"
           >
             {/* USER */}
             <div className="flex items-center gap-3 mb-3">
@@ -243,7 +250,7 @@ const Dashboard = () => {
             <img
               src={post.imageUrl}
               alt="post"
-              className="w-full max-h-[600px] object-contain rounded-2xl border border-[#2a2a2a] bg-black"
+              className="w-full max-h-[600px] object-cover rounded-xl border border-[#2a2a2a] bg-[#0f0f0f]"
             />
 
 
@@ -272,7 +279,7 @@ const Dashboard = () => {
                     setComments(copy);
                   }
                 }}
-                className="flex items-center gap-1 hover:text-blue-400 transition"
+               className="flex items-center gap-1 transition hover:text-gray-200"
               >
                 <MessageSquare size={20} />
                 <span>{post.commentCount || 0} comments</span>
@@ -297,13 +304,13 @@ const Dashboard = () => {
                       }))
                     }
                     placeholder="Write a comment..."
-                    className="flex-grow min-w-[200px] border border-[#3a3a3a] rounded-lg p-2 bg-[#1e1e1e]"
+                    className="flex-grow min-w-[200px] bg-[#1a1a1a] border border-[#333] rounded-lg p-2 placeholder-gray-500 focus:ring-1 focus:ring-gray-400 outline-none transition"
                   />
 
                   <button
                     onClick={() => handleAddComment(post.id)}
                     disabled={commentLoading[post.id]}
-                    className="px-4 py-2 bg-white text-black rounded-lg w-full sm:w-auto"
+                    className="my-2 sm:my-0 px-3 md:px-5 py-2 bg-gray-100 text-black rounded-full font-medium hover:bg-gray-300 transition disabled:opacity-50"
                   >
                     Post
                   </button>
@@ -347,7 +354,7 @@ const Dashboard = () => {
       {hasMore && !noPosts && (
         <button
           onClick={() => fetchFeed()}
-          className="mx-auto mt-6 px-4 py-2 bg-white text-black rounded-xl flex"
+         className="mx-auto mt-8 px-6 py-3 bg-gray-100 text-black rounded-full font-semibold hover:bg-gray-300 transition"
         >
           Load More
         </button>

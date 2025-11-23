@@ -126,7 +126,7 @@ const ChatList = () => {
 
       {chats.length === 0 ? (
         <p className="text-gray-500 text-center mt-20 italic">
-          No conversations yet.
+          No conversations yet. Search for a friend and send a message!
         </p>
       ) : (
         <div className="flex flex-col gap-4 max-w-[600px] mx-auto">
@@ -145,31 +145,33 @@ const ChatList = () => {
                 alt="pfp"
               />
 
-              <div className="flex-1">
-                <p className="font-medium text-gray-100 text-lg">
+              <div className="flex flex-col flex-1 min-w-0">
+                <p className="font-medium text-gray-100 text-lg truncate">
                   {chat.otherUserUsername}
                 </p>
-                <p className="text-gray-400 text-sm truncate w-[250px]">
-                  {chat.lastMessage || "No messages yet"}
+                <p className="text-gray-400 text-sm truncate">
+                  {chat.lastMessage || "No messages yet."}
                 </p>
               </div>
 
-              <div className="text-right">
+
+              <div className="flex flex-col items-end flex-shrink-0 gap-1">
                 <p className="text-xs text-gray-500">
                   {chat.lastMessageTimestamp
-                    ? new Date(chat.lastMessageTimestamp).toLocaleTimeString(
-                        [],
-                        { hour: "2-digit", minute: "2-digit" }
-                      )
+                    ? new Date(chat.lastMessageTimestamp).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
                     : ""}
                 </p>
+
+                {unread[chat.chatId] > 0 && (
+                  <span className="bg-blue-600 text-white text-[10px] px-2 py-1 rounded-full">
+                    {unread[chat.chatId] > 99 ? "99+" : unread[chat.chatId]}
+                  </span>
+                )}
               </div>
 
-              {unread[chat.chatId] > 0 && (
-                <span className="bg-blue-600 text-white text-[10px] px-2 py-1 rounded-full ml-2">
-                  {unread[chat.chatId]}
-                </span>
-              )}
             </div>
           ))}
         </div>

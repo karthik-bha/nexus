@@ -8,7 +8,7 @@ const Navbar = () => {
     const dropRef = useRef(null);
     const { totalUnread } = useChat();
 
-    
+
 
     const handleToggleDropDown = () => setDropDown((prev) => !prev);
 
@@ -26,18 +26,19 @@ const Navbar = () => {
 
     const handleLogout = () => {
         localStorage.removeItem("token");
-        window.location.replace("/auth?type=signin");
+        window.location.replace("/auth?type=sign-in");
     };
     const pfp = localStorage.getItem("pfp");
     return (
         <div className="bg-black text-white sticky top-0 z-50 shadow-lg border-b border-gray-800">
             <div className="max-w-[1200px] mx-auto px-6 py-4 flex justify-between items-center">
                 {/* Logo */}
-                <h1 className="text-2xl md:text-3xl font-semibold tracking-widest text-white hover:text-gray-300 transition-colors">
+                {/* <h1 className="text-2xl md:text-3xl font-semibold tracking-widest text-white hover:text-gray-300 transition-colors">
                     <Link to="/dashboard">
                         NEXUS
                     </Link>
-                </h1>
+                </h1> */}
+                <Link to="/dashboard"><img src="/nexus-nav-logo.jpg" alt="Nexus Logo" className="max-w-[120px] md:max-w-[150px]  h-auto" />  </Link>
 
 
                 {/* Icons */}
@@ -81,9 +82,12 @@ const Navbar = () => {
                     {dropDown && (
                         <div
                             ref={dropRef}
-                            className="absolute top-12 right-0 bg-neutral-900 text-white border border-neutral-700 rounded-2xl shadow-xl w-[85vw] md:w-[25vw] xl:w-[15vw] p-4 animate-fadeIn"
+                            className={`absolute top-12 right-0 bg-neutral-900 text-white border border-neutral-700 
+                            rounded-2xl shadow-xl w-[85vw] md:w-[25vw] xl:w-[15vw] p-4 transition-all duration-200 
+                            ${dropDown ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"}`}
+
                         >
-                            <ul className="flex flex-col gap-3 text-sm">
+                            <ul className="flex flex-col gap-4 text-sm">
                                 <li>
                                     <Link
                                         to="/post"
@@ -128,7 +132,7 @@ const Navbar = () => {
                     )}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

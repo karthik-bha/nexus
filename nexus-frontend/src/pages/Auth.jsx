@@ -27,6 +27,18 @@ const Auth = () => {
                 setLoading(false);
                 return;
             }
+            if (username.trim().length < 3) {
+                return toast.error("Username must be at least 3 characters.");
+            }
+
+            if (password.length < 4) {
+                return toast.error("Password must be at least 4 characters.");
+            }
+
+            if (type === "sign-up" && email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                return toast.error("Invalid email format.");
+            }
+
 
             const body = { username, password };
             if (type === "sign-up" && email.trim() !== "") body.email = email;
@@ -76,18 +88,19 @@ const Auth = () => {
         }
     };
 
-
     return (
-        <div className="h-screen flex items-center justify-center bg-neutral-900 text-gray-100 px-4">
+        <div className="h-screen flex items-center justify-center bg-[url('/bg-c.jpg')] bg-cover bg-center text-gray-100 px-4 backdrop-blur-sm">
             <div className="w-full max-w-md">
-                <h1 className="text-5xl md:text-6xl font-semibold tracking-widest text-white text-center mb-10">
+                {/* <h1 className="text-5xl md:text-6xl font-semibold tracking-widest text-white text-center mb-10">
                     <Link to="/">NEXUS</Link>
-                </h1>
+                </h1> */}
+                <Link to="/"><img src="/nexus-logo-transparent.png" alt="Nexus Logo" className="w-full md:w-[400px] h-auto mx-auto mb-6" /></Link>
 
                 <form
                     onSubmit={handleSubmit}
-                    className="bg-neutral-800 p-8 rounded-2xl shadow-xl flex flex-col gap-4"
+                    className="backdrop-blur-lg bg-white/5 border border-white/10 p-8 rounded-2xl shadow-[0_0_25px_rgba(0,0,0,0.5)] flex flex-col gap-4"
                 >
+
                     <h2 className="text-2xl font-semibold text-center mb-4">
                         {type === "sign-up" ? "Sign Up" : "Sign In"}
                     </h2>
@@ -97,7 +110,7 @@ const Auth = () => {
                         placeholder="Username *"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        className="bg-neutral-700 p-3 rounded-lg border border-neutral-600 focus:ring-2 focus:ring-gray-500"
+                        className="bg-white/5 text-gray-200 p-3 rounded-lg border border-white/10 focus:ring-2 focus:ring-[#6EE7FF] outline-none placeholder-gray-400 transition"
                     />
 
                     <input
@@ -105,7 +118,7 @@ const Auth = () => {
                         placeholder="Password *"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="bg-neutral-700 p-3 rounded-lg border border-neutral-600 focus:ring-2 focus:ring-gray-500"
+                        className="bg-white/5 text-gray-200 p-3 rounded-lg border border-white/10 focus:ring-2 focus:ring-[#6EE7FF] outline-none placeholder-gray-400 transition"
                     />
 
                     {type === "sign-up" && (
@@ -114,7 +127,7 @@ const Auth = () => {
                             placeholder="Email (optional)"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="bg-neutral-700 p-3 rounded-lg border border-neutral-600 focus:ring-2 focus:ring-gray-500"
+                            className="bg-white/5 text-gray-200 p-3 rounded-lg border border-white/10 focus:ring-2 focus:ring-[#6EE7FF] outline-none placeholder-gray-400 transition"
                         />
                     )}
 

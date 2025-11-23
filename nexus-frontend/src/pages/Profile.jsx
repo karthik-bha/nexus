@@ -62,11 +62,13 @@ const Profile = () => {
     <section className="max-w-[1200px] mx-auto flex flex-col py-12 px-4 text-white">
       <h2 className="text-3xl text-center font-semibold tracking-wide mb-12 ">Profile</h2>
 
-      <div className="flex flex-col items-center bg-neutral-900 border border-neutral-800 rounded-xl p-8 shadow-xl gap-6 w-full md:w-[40vw] mx-auto">
+      <div className="flex flex-col items-center bg-[#111] border-[#262626]
+        rounded-xl p-8 shadow-xl gap-6 w-full md:w-[40vw] mx-auto">
         <img
           src={profileData?.profile_picture || fallbackPfp}
           alt="profile"
-          className="h-32 w-32 rounded-full object-cover border border-gray-600"
+          className="h-32 w-32 rounded-full object-cover border border-[#333] shadow-[0_0_15px_rgba(255,255,255,0.05)]"
+          loading="lazy"
           onError={(e) => (e.target.src = fallbackPfp)}
         />
 
@@ -74,23 +76,21 @@ const Profile = () => {
           <p className="text-xl font-medium">{profileData?.username || "Anonymous User"}</p>
           <p className="text-gray-400">{profileData?.email || "No email found"}</p>
           <p
-            className={`text-sm ${
-              profileData?.bio ? "text-gray-300" : "italic text-gray-500"
-            }`}
+            className={`text-sm ${profileData?.bio ? "text-gray-300" : "italic text-gray-500"
+              }`}
           >
             {profileData?.bio || "No bio added yet"}
           </p>
 
           <button
             onClick={() => window.location.href = "/settings"}
-            className="mt-4 px-5 py-2 bg-gray-100 text-black font-semibold rounded-full hover:bg-gray-300 transition"
+            className="hover:cursor-pointer mt-4 px-5 py-2 bg-gray-100 text-black font-semibold rounded-full hover:bg-gray-300 transition"
           >
-            Go to Settings
+            Settings
           </button>
-           <button
+          <button
             onClick={() => window.location.href = `/public-profile/${profileData?.username}`}
-            className="mt-4 px-5 py-2 bg-gray-100 text-black font-semibold rounded-full hover:bg-gray-300 transition"
-          >
+            className="hover:cursor-pointer mt-2 px-5 py-2 border border-gray-500 rounded-full text-gray-300 hover:bg-neutral-800 transition">
             View your Public Profile
           </button>
 

@@ -89,7 +89,7 @@ const Post = () => {
   };
 
   return (
-    <section className="flex flex-col items-center text-gray-100 bg-black min-h-screen py-10">
+    <section className="flex flex-col items-center text-gray-100 bg-[#0a0a0a] min-h-screen py-10">
       <h2 className="text-3xl text-center font-semibold tracking-wide mb-12 ">
         Create a New Post
       </h2>
@@ -170,7 +170,7 @@ const Post = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-gray-100 text-black py-2 rounded-full font-semibold hover:bg-gray-300 disabled:opacity-70 transition-colors flex justify-center items-center"
+          className="hover:cusor-pointer w-full bg-gray-100 text-black py-2 rounded-full font-semibold hover:bg-gray-300 disabled:opacity-70 transition-colors flex justify-center items-center"
         >
           {loading ? (
             <>
