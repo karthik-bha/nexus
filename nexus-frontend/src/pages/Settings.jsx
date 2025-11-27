@@ -26,10 +26,16 @@ const Settings = () => {
             form.append("user", new Blob([JSON.stringify(user)], { type: "application/json" }));
             if (file) form.append("file", file);
 
-            await apiWrapper(`/user/profile`, {
+            const response = await apiWrapper(`/user/profile`, {
                 method: "PATCH",
                 body: form,
             });
+            const updatedUser = await response.json();
+
+            if (updatedUser.profile_picture) {
+                localStorage.setItem("pfp", updatedUser.profile_picture);
+                window.dispatchEvent(new Event("storage"));
+            }
 
             toast.success("Profile updated successfully!");
         } catch (err) {

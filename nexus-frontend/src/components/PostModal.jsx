@@ -23,9 +23,7 @@ const PostModal = ({ post, onClose, userDetails , onDelete}) => {
 
     const fetchComments = async () => {
         try {
-            const res = await fetch(
-                `${import.meta.env.VITE_BACKEND_URL}/comments/${post.id}`
-            );
+            const res = await apiWrapper(`/comments/${post.id}`,{ method: "GET" })
 
             if (!res.ok) throw new Error("Failed to load comments");
             const data = await res.json();

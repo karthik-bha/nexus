@@ -69,7 +69,7 @@ const Dashboard = () => {
     try {
       setCommentLoading(prev => ({ ...prev, [postId]: true }));
 
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/comments/${postId}`);
+      const res = await apiWrapper(`/comments/${postId}`,{ method: "GET" });
       if (!res.ok) throw new Error("Failed");
 
       const data = await res.json();

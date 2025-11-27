@@ -11,7 +11,7 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    console.log("🔵 Creating socket with token:", token);
+    // console.log("🔵 Creating socket with token:", token);
 
     const s = io(import.meta.env.VITE_SOCKET_URL, {
       transports: ["polling", "websocket"],
@@ -21,23 +21,23 @@ export const SocketProvider = ({ children }) => {
     });
 
     s.on("connect", () => {
-      console.log("🟢 SOCKET CONNECTED!", s.id);
+      // console.log("🟢 SOCKET CONNECTED!", s.id);
       setConnected(true);
     });
 
     s.on("connect_error", (err) => {
-      console.error("🔴 CONNECT ERROR:", err.message);
+      console.error("CONNECT ERROR:", err.message);
     });
 
     s.on("disconnect", () => {
-      console.log("⚪ SOCKET DISCONNECTED");
+      // console.log("⚪ SOCKET DISCONNECTED");
       setConnected(false);
     });
 
     setSocket(s);
 
     return () => {
-      console.log("🟡 Cleaning up socket");
+      // console.log("🟡 Cleaning up socket");
       s.disconnect();
     };
   }, []);
