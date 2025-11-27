@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useSocket } from "../context/socketContext";
+import { useSocket } from "../context/SocketContext";
 import apiWrapper from "../api-wrapper/api";
 
 const ChatList = () => {

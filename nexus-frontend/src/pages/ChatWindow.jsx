@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { useSocket } from "../context/socketContext";
+import { useSocket } from "../context/SocketContext";
 
 
 const ChatWindow = () => {

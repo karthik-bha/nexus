@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
-import { useSocket } from "./socketContext";
+import { useSocket } from "./SocketContext";
 
 const ChatContext = createContext();
 export const useChat = () => useContext(ChatContext);
