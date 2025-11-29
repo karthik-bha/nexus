@@ -138,8 +138,12 @@ const Auth = () => {
                     >
                         {loading ? "Please wait..." : type === "sign-up" ? "Sign Up" : "Sign In"}
                     </button>
+                    <p className="text-center text-gray-400 text-[0.8rem] md:text-sm mt-2">
+                        Login/Account Creation may take up to <span className="text-gray-200 font-semibold">50 seconds</span> on the <span className="text-gray-200 font-semibold">first attempt</span> because the backend is hosted on a free Render tier.
+                        Subsequent requests will be much faster. Thank you for your patience!
+                    </p>
 
-                    <p className="text-center text-gray-400 mt-2">
+                    <p className="text-center text-gray-400 mt-2 text-xs sm:text-sm">
                         {type === "sign-up" ? "Already have an account?" : "Don't have an account?"}{" "}
                         <Link
                             className="text-red-400 hover:text-red-500 transition"
@@ -148,6 +152,7 @@ const Auth = () => {
                             {type === "sign-up" ? "Sign In" : "Sign Up"}
                         </Link>
                     </p>
+
                 </form>
             </div>
         </div>
